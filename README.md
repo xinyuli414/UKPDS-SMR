@@ -4,7 +4,7 @@ Analysis code and meta-analysis data for the Brief Report:
 
 > **Healthy Participant Effect: Standardised Mortality Ratios Over 44 Years in the UK Prospective Diabetes Study.**
 > Xinyu Li, Jose Leal, Ruth L. Coleman, James Altunkaya, Helen Dakin, Rury R. Holman, Philip Clarke.
-> University of Oxford. *(Manuscript in preparation / under review — targeted at* Diabetes Care*.)*
+> University of Oxford. *(Manuscript in preparation — targeted at* Diabetes Care*.)*
 
 ## Overview
 
