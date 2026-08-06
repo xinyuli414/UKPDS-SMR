@@ -4,15 +4,36 @@ Analysis code and meta-analysis data for the Brief Report:
 
 > **Healthy Participant Effect: Standardised Mortality Ratios Over 44 Years in the UK Prospective Diabetes Study.**
 > Xinyu Li, Jose Leal, Ruth L. Coleman, James Altunkaya, Helen Dakin, Rury R. Holman, Philip Clarke.
-> University of Oxford. *(Manuscript in preparation — targeted at* Diabetes Care*.)*
+> University of Oxford. *(Manuscript in preparation — targeted at* Diabetes Care.)
 
 ## Overview
 
 This study asks whether participants in a randomised trial have lower mortality than people with type 2 diabetes (T2D) in routine care — a **healthy-participant effect (HPE)**. We estimated **standardised mortality ratios (SMRs)** — observed deaths divided by the deaths expected if participants had died at UK general-population rates — across the 44-year follow-up of UKPDS (1977–2021), and benchmarked them against a meta-analysis of published SMRs from routine-care T2D cohorts.
 
-Over a median 17.8 years of follow-up (99,571 person-years; 3,380 deaths among 5,102 participants), the overall UKPDS SMR was **1.63 (95% CI 1.58–1.69)**. Mortality was *below* the general population in the first three years after enrolment (SMR **0.84, 95% CI 0.68–1.03**) and rose progressively thereafter. The pooled SMR from routine-care cohorts in high-income countries with follow-up overlapping the UKPDS era was **1.67 (95% CI 1.38–2.02)**, which UKPDS did not reach until around year 11 — consistent with a healthy-participant effect early in the trial.
+Over a median 17.8 years of follow-up (99,571 person-years; 3,380 deaths among 5,102 participants), the overall UKPDS SMR was **1.63 (95% CI 1.58–1.69)**. Mortality was *below* the general population in the first three years after enrolment (SMR **0.84, 95% CI 0.68–1.03**) and rose progressively thereafter. The pooled SMR from routine-care cohorts in high-income countries with follow-up overlapping the UKPDS era was **1.64 (95% CI 1.39–1.94)**, which UKPDS did not reach until around year 11 — consistent with a healthy-participant effect early in the trial.
 
 Expected deaths are derived from age-, sex-, and calendar-year–matched UK life tables from the [Human Mortality Database (HMD)](https://www.mortality.org). All SMR confidence intervals use the exact Poisson method; the meta-analysis uses a multilevel random-effects model with cluster-robust confidence intervals at the cohort level.
+
+## An invitation to collaborate
+
+One trial cannot tell us how general the healthy-participant effect is.  **We would like to repeat this analysis across as many trials as possible, and we are actively looking for collaborators.**
+
+The analysis requires only the following, one row per participant:
+
+| Field | Notes |
+| --- | --- |
+| Sex | Selects the matching life table |
+| Date of birth, or age at entry | Year and month are sufficient |
+| Date of entry | Randomisation or enrolment |
+| Date of last follow-up | Death, or date last known alive |
+| Vital status | All-cause death |
+
+No biomarkers, treatment allocation, cause of death, or record linkage are needed; expected deaths are taken from national life tables that are already public (the [HMD](https://www.mortality.org) covers around 40 countries). Baseline age, smoking status, HbA1c, BMI, ethnicity and treatment arm are optional, and allow the stratified analyses reported in the paper to be reproduced.
+
+**Individual-level data need not leave your institution.** The scripts here run locally against your own data and emit only aggregate SMRs by follow-up band, which are what the cross-trial comparison actually needs. We are happy to adapt the code to your data structure.
+
+If this is of interest — whether you hold a trial dataset, or simply think a particular trial ought to be in scope — please get in touch (contact details at the bottom of this page). 
+
 
 ## Repository contents
 
@@ -34,7 +55,7 @@ Restricts the analysis to the **4,209 participants randomised after the three-mo
 
 ### `Meta-analysis.R`
 
-Pools published all-cause SMRs for routine-care T2D populations to provide the external benchmark. Each SMR is analysed on the log scale, with within-study variance taken from the reported 95% CI (or approximated as 1/deaths when no CI is available). Estimates are pooled with a **multilevel random-effects meta-analysis** (`metafor::rma.mv`) with random intercepts for cohort / study / estimate, and headline confidence intervals are made **cluster-robust by cohort** (`clubSandwich`). It also runs the pre-specified subgroups (WHO region, World Bank income group, OECD membership, and overlap with the UKPDS era) and produces the forest plots behind manuscript **Figure 2** and the **ESM Appendix 4** figures. Outputs are a results workbook (`SMR_T2DM_results.xlsx`), combined forest-plot PDFs, and per-figure PNGs.
+Pools published all-cause SMRs for routine-care T2D populations to provide the external benchmark. Each SMR is analysed on the log scale, with within-study variance taken from the reported 95% CI (or approximated as 1/deaths when no CI is available). Estimates are pooled with a **multilevel random-effects meta-analysis** (`metafor::rma.mv`) with random intercepts for cohort / study / estimate, and headline confidence intervals are made **cluster-robust by cohort** (`clubSandwich`). It also runs the pre-specified subgroups (WHO region, World Bank income group, OECD membership, and overlap with the UKPDS era) and produces the forest plots behind manuscript **Figure 3** and the **ESM Appendix 4** figures. Outputs are a results workbook (`SMR_T2DM_results.xlsx`), combined forest-plot PDFs, and per-figure PNGs.
 
 ### `SMR_T2DM_input_final.xlsx`
 
@@ -43,7 +64,7 @@ The extracted literature-review dataset that `Meta-analysis.R` reads. It has two
 - **`1_Paper_overall`** — one row per study, with study/cohort metadata (author, year, country, WHO region, income/OECD flags, study period) and overall, male, and female SMRs with confidence limits, death counts, and cohort sizes.
 - **`2_Sub_period`** — additional SMR estimates reported for calendar sub-periods within a study.
 
-The included studies (24 in the meta-analysis; 25 in the review) span 359,248 individuals with T2D and 95,577 deaths, and are listed in **ESM Table 4.1** of the paper.
+The included studies (23 in the meta-analysis; 25 in the review) span 348,228 individuals with T2D and 92,811 deaths, and are listed in **ESM Table 4.1** of the paper.
 
 ## Data requirements
 
